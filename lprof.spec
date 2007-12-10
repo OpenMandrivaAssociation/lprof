@@ -14,12 +14,10 @@ License:	GPL
 URL:		http://lprof.sourceforge.net
 #Source:		http://prdownloads.sourceforge.net/lprof/%{name}-%{version}.tar.bz2
 Source0:	lprof-%{version}-cvs20071209.tar.bz2
-Patch1:		lprof-mainbase-typo.diff
-Patch2:		lprof-fix-chk4qt.diff
 Patch3:		lprof-desktop.diff
 BuildRequires:	desktop-file-utils
 BuildRequires:	ImageMagick
-BuildRequires:	liblcms-devel >= 1.09
+BuildRequires:	lcms-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libvigra-devel
 BuildRequires:	python
@@ -35,10 +33,7 @@ profiles for devices such as cameras, scanners and monitors.
 %prep
 rm -rf %{buildroot}
 %setup -q -n lprof
-#%patch1 -p 0 -b .fix-typo
-#%patch2 -p 0 -b .fix-chk4qt
 %patch3 -p 0 -b .fix-desktop
-#chmod 644 data/help/about.txt
 
 %build
 PATH=$PATH:%{_prefix}/lib/qt3/bin
