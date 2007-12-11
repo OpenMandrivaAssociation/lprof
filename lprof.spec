@@ -14,6 +14,7 @@ License:	GPL
 URL:		http://lprof.sourceforge.net
 #Source:		http://prdownloads.sourceforge.net/lprof/%{name}-%{version}.tar.bz2
 Source0:	lprof-%{version}-cvs20071209.tar.bz2
+Source1:	96-lprof.rules
 Patch3:		lprof-desktop.diff
 BuildRequires:	desktop-file-utils
 BuildRequires:	ImageMagick
@@ -23,6 +24,7 @@ BuildRequires:	libvigra-devel
 BuildRequires:	python
 BuildRequires:	qt3-devel
 BuildRequires:  scons
+BuildRequires:	libusb-devel
 Requires:	qt3-assistant
 BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 %description
@@ -35,6 +37,12 @@ rm -rf %{buildroot}
 %setup -q -n lprof
 %patch3 -p 0 -b .fix-desktop
 
+if [ "%{_lib}" != "lib" ]; then 
+  sed -i -e "s/(i, 'lib')/(i, 'lib64')/g" SConstruct
+  sed -i -e 's,/usr/lib,'$(pkg-config --variable libdir x11)',g' -e 's,/usr/pkg/lib,'$(pkg-config --variable libdir qt-mt)',g'  build_config.py
+fi
+
+
 %build
 PATH=$PATH:%{_prefix}/lib/qt3/bin
 export PATH
@@ -46,6 +54,9 @@ rm -rf %{buildroot}
 mkdir -p %{buildroot}%{_prefix}
 PATH=$PATH:%{_prefix}/lib/qt3/bin
 export PATH
+
+mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
+install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/udev/rules.d
 
 # create missing files
 touch data/help/{en,ru}/calreports.html
@@ -70,6 +81,7 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc COPYING README.NetBSD sRGB_profile_License KNOWN_BUGS README
+%config(noreplace) %{_sysconfdir}/udev/rules.d/96-lprof.rules
 %{_bindir}/*
 %{_datadir}/applications/*
 %{_datadir}/%{name}
