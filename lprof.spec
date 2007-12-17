@@ -1,8 +1,9 @@
 %define	name	lprof
 
 %define	version	1.11.4.2
+%define cvssnapshot 20071212
 
-%define	rel	0.1
+%define	rel	0.2
 %define	release	%mkrel %{rel}
 
 Name:		%{name}
@@ -13,9 +14,13 @@ Group: 		Office
 License:	GPL
 URL:		http://lprof.sourceforge.net
 #Source:		http://prdownloads.sourceforge.net/lprof/%{name}-%{version}.tar.bz2
-Source0:	lprof-%{version}-cvs20071209.tar.bz2
-Source1:	96-lprof.rules
+Source0:	lprof-%{version}-cvs%{cvssnapshot}.tar.bz2
 Patch3:		lprof-desktop.diff
+# (fc) 1.11.4.2-0.2mdv fix buffer overflow in dispread (Daniel Berrange, Fedora)
+Patch4:		lprof-dispread-buffer-overflow.patch
+# (fc) 1.11.4.2-0.2mdv 0.70-0.1.beta7.3mdv fix buffer overflow in iccdump (Daniel Berrange, Fedora)
+Patch5:  	lprof-iccdump-buffer-overflow.patch
+
 BuildRequires:	desktop-file-utils
 BuildRequires:	ImageMagick
 BuildRequires:	lcms-devel
@@ -35,7 +40,9 @@ profiles for devices such as cameras, scanners and monitors.
 %prep
 rm -rf %{buildroot}
 %setup -q -n lprof
-%patch3 -p 0 -b .fix-desktop
+%patch3 -p0 -b .fix-desktop
+%patch4 -p1 -b .dispread-buffer-overflow
+%patch5 -p1 -b .iccdump-buffer-overflow
 
 if [ "%{_lib}" != "lib" ]; then 
   sed -i -e "s/(i, 'lib')/(i, 'lib64')/g" SConstruct
@@ -46,7 +53,7 @@ fi
 %build
 PATH=$PATH:%{_prefix}/lib/qt3/bin
 export PATH
-scons PREFIX="%{_prefix}" QT_LIBPATH="%{_prefix}/lib/qt3/%{_lib}" ccflags="`echo %{optflags} | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2//g'`" cxxflags="%{optflags}"
+scons PREFIX="%{_prefix}" QT_LIBPATH="%{_prefix}/lib/qt3/%{_lib}" ccflags="`echo %{optflags} | sed -e 's/-Wp,-D_FORTIFY_SOURCE=2/-Wp,-D_FORTIFY_SOURCE=1/g'`" cxxflags="%{optflags}"
 
 %install
 rm -rf %{buildroot}
@@ -55,11 +62,6 @@ mkdir -p %{buildroot}%{_prefix}
 PATH=$PATH:%{_prefix}/lib/qt3/bin
 export PATH
 
-mkdir -p %{buildroot}%{_sysconfdir}/udev/rules.d
-install -m 644 %{SOURCE1} %{buildroot}%{_sysconfdir}/udev/rules.d
-
-# create missing files
-touch data/help/{en,ru}/calreports.html
 scons PREFIX="%{buildroot}%{_prefix}" install
 
 install -p -D -m0644 data/icons/lprof.png %{buildroot}%{_liconsdir}/%{name}.png
@@ -81,7 +83,6 @@ rm -rf %{buildroot}
 %files
 %defattr(-,root,root,-)
 %doc COPYING README.NetBSD sRGB_profile_License KNOWN_BUGS README
-%config(noreplace) %{_sysconfdir}/udev/rules.d/96-lprof.rules
 %{_bindir}/*
 %{_datadir}/applications/*
 %{_datadir}/%{name}
