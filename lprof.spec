@@ -31,7 +31,6 @@ BuildRequires:	qt3-devel
 BuildRequires:  scons
 BuildRequires:	libusb-devel
 Requires:	qt3-assistant
-BuildRoot:	%{_tmppath}/%{name}-%{version}-%{release}
 %description
 LProf is an open source color profiler that creates ICC compliant
 profiles for devices such as cameras, scanners and monitors.
