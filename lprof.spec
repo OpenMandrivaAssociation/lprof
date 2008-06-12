@@ -71,11 +71,15 @@ convert %{buildroot}%{_liconsdir}/%{name}.png -size 32x32 %{buildroot}%{_iconsdi
 mkdir -p -m 755 %{buildroot}%{_miconsdir}
 convert %{buildroot}%{_iconsdir}/%{name}.png -size 16x16 %{buildroot}%{_miconsdir}/%{name}.png
 
+%if %mdkversion < 200900
 %post
 %update_menus
+%endif
 
+%if %mdkversion < 200900
 %postun
 %clean_menus
+%endif
 
 %clean
 rm -rf %{buildroot}
