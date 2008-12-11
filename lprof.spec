@@ -22,7 +22,7 @@ Patch4:		lprof-dispread-buffer-overflow.patch
 Patch5:  	lprof-iccdump-buffer-overflow.patch
 
 BuildRequires:	desktop-file-utils
-BuildRequires:	ImageMagick
+BuildRequires:	imagemagick
 BuildRequires:	lcms-devel
 BuildRequires:	libtiff-devel
 BuildRequires:	libvigra-devel
