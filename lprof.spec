@@ -3,7 +3,7 @@
 %define	version	1.11.4.2
 %define cvssnapshot 20071212
 
-%define	rel	0.2
+%define	rel	0.3
 %define	release	%mkrel %{rel}
 
 Name:		%{name}
