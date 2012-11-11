@@ -1,0 +1,20 @@
+diff -rup argyllcms-0.70.orig/icc/icc.c argyllcms-0.70.new/icc/icc.c
+--- lprof/src/argyll/icc/icc.c	2007-10-19 21:53:54.000000000 -0400
++++ lprof/src/argyll/icc/icc.c	2007-12-12 13:54:47.000000000 -0500
+@@ -2999,13 +2999,14 @@ static char *string_XYZNumber(icmXYZNumb
+ /* Helper: Return a string that shows the XYZ number value, */
+ /* and the Lab D50 number in paren. */
+ static char *string_XYZNumber_and_Lab(icmXYZNumber *p) {
+-	static char buf[50];
++	static char buf[100];
+ 	double lab[3];
+ 	lab[0] = p->X;
+ 	lab[1] = p->Y;
+ 	lab[2] = p->Z;
+ 	icmXYZ2Lab(&icmD50, lab, lab);
+-	sprintf(buf,"%f, %f, %f    [Lab %f, %f, %f]", p->X, p->Y, p->Z, lab[0], lab[1], lab[2]);
++	snprintf(buf,sizeof(buf),"%f, %f, %f    [Lab %f, %f, %f]", p->X, p->Y, p->Z, lab[0], lab[1], lab[2]);
++        buf[sizeof(buf)-1] = '\0';
+ 	return buf;
+ }
+ 			

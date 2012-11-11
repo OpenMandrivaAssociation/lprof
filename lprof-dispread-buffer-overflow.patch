@@ -1,0 +1,12 @@
+diff -rup argyllcms-0.70.orig/numlib/numsup.c argyllcms-0.70.new/numlib/numsup.c
+--- lprof/src/argyll/numlib/numsup.c	2007-12-12 13:27:33.000000000 -0500
++++ lprof/src/argyll/numlib/numsup.c	2007-12-12 13:28:01.000000000 -0500
+@@ -132,7 +132,7 @@ void set_exe_path(char *argv0) {
+ 	for (i = strlen(exe_path)-1; i >= 0; i--) {
+ 		if (exe_path[i] == '/') {
+ 			char *tpath;
+-			if ((tpath = malloc(sizeof(exe_path + i))) == NULL)
++			if ((tpath = malloc(strlen(exe_path + i))) == NULL)
+ 				error("set_exe_path: malloc %d bytes failed",sizeof(exe_path + i));
+ 			strcpy(tpath, exe_path + i + 1);
+ 			error_program = tpath;				/* Set error_program to base name */
