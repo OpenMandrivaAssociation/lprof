@@ -12,7 +12,7 @@ Release:	%{release}
 Summary:	Color Profilers
 Group: 		Office
 License:	GPL
-URL:		http://lprof.sourceforge.net
+URL:		https://lprof.sourceforge.net
 #Source:		http://prdownloads.sourceforge.net/lprof/%{name}-%{version}.tar.bz2
 Source0:	lprof-%{version}-cvs%{cvssnapshot}.tar.bz2
 Patch3:		lprof-desktop.diff
